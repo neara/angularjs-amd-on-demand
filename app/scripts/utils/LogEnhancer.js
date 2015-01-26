@@ -13,10 +13,11 @@
      * Register the class with RequireJS.
      */
     define([
-            "utils/makeTryCatch",
-            "utils/DateTime"
+            "utils/DateTime",
+            "utils/common",
+            "utils/makeTryCatch"
         ],
-        function (makeTryCatch, DateTime) {
+        function (DateTime) {
             /**
              * Constructor function
              */
@@ -65,9 +66,7 @@
                         return enhancedLogFn;
                     },
 
-                    /**
-                     * Support to generate class-specific logger instance with classname only
-                     */
+                    // Support to generate class-specific logger instance with classname only
                     getInstance = function (className, customSeparator) {
                         className = (className !== undefined) ? className + (customSeparator || separator) : "";
 
