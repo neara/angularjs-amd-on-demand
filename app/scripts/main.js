@@ -59,14 +59,13 @@
 
     require([
         'jQuery',
-        'utils/common',
         'angular',
         'angular-route',
         'angular-sanitize',
         'angular-animate',
         'angular-messages',
         'app'
-    ], function (jQuery, utils, angular, routes, sanitize, animate, msgs, app) {
+    ], function (jQuery, angular, routes, sanitize, animate, msgs, app) {
         window.jQuery = jQuery;
         angular.element().ready(function () {
             angular.resumeBootstrap([app.name]);
