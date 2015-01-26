@@ -1,7 +1,7 @@
 (function(define, describe) {
     "use strict";
 
-    define(['angular', 'angular-mocks', 'controllers/HomeViewController', 'angular-route'], function(angular, mocks, controller) {
+    define(['angular', 'angular-mocks', 'controllers/HomeViewController', 'angular-route'], function() {
         describe('The "HomeViewController"', function() {
             var $scope, ctrl, $rootScope;
             beforeEach(module('angularAmdApp'));
@@ -15,6 +15,10 @@
 
             it('should set app name to "angularAmdApp"', function() {
                expect($scope.app).toBe("AngularAmdApp");
+            });
+
+            it('should have 3 awesome things', function() {
+               expect($scope.awesomeThings.length).toBe(3);
             });
         });
     });
