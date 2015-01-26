@@ -1,19 +1,44 @@
 /**
+ * UTILS module - contains a number of general methods.
+ * Inspired by http://javascript.crockford.com/remedial.html
  * Created by anatr on 1/14/15.
  */
-(function () {
+(function (define) {
     "use strict";
 
-    /**
-     * UTILS module - contains a number of general methods.
-     * Inspired by http://javascript.crockford.com/remedial.html
-     * */
-    window.UTILS = (function (utils, $) {
+    if (!String.prototype.supplant) {
+        /**
+         * Python like string formatting
+         *
+         * i.e.:
+         *
+         * >>> s = 'hello {name}'
+         * >>> s.supplan({name: 'ana'})
+         * >>> 'hello ana'
+         * */
 
+        console.debug('Adding supplant to String object');
+
+        String.prototype.supplant = function (o) {
+            return this.replace(
+                /\{([^{}]*)\}/g,
+                function (a, b) {
+                    var r = o[b];
+                    return typeof r === 'string' || typeof r === 'number' ? r : a;
+                }
+            );
+        };
+    }
+
+    define(['jQuery'], function ($) {
+
+        console.debug('Initializing UTILS module');
+
+        //var UTILS = function () {
         /**
          * Improved typeof method, distinguishes <array> and <null> from object
          */
-        utils.typeOf = function (value) {
+        function typeOf(value) {
             var s = typeof value;
             if (s === 'object') {
                 if (value) {
@@ -25,17 +50,17 @@
                 }
             }
             return s;
-        };
+        }
 
         /**
          * Check if the object/array/string is empty.
          */
-        utils.isEmpty = function (o) {
-            var i, v, t = utils.typeOf(o);
+        function isEmpty(o) {
+            var i, v, t = typeOf(o);
             if (t === 'object') {
                 for (i in o) {
                     v = o[i];
-                    if (v !== undefined && utils.typeOf(v) !== 'function') {
+                    if (v !== undefined && typeOf(v) !== 'function') {
                         return false;
                     }
                 }
@@ -51,7 +76,7 @@
                 return undefined;
             }
             return t === 'null';
-        };
+        }
 
         /***
          * Detect is the element is in the viewport
@@ -59,7 +84,7 @@
          * @param ele - selector for the element in question
          * @returns {boolean}
          */
-        utils.isElementInViewPort = function (viewportSelector, ele) {
+        function isElementInViewPort(viewportSelector, ele) {
             if ($ === undefined) {
                 console.error('This method requires jQuery');
                 return false;
@@ -77,7 +102,7 @@
             eleBoundaries.right = eleBoundaries.left + ele.outerWidth();
             eleBoundaries.bottom = eleBoundaries.top + ele.outerHeight();
             return !(viewport.right < eleBoundaries.left || viewport.left > eleBoundaries.right || viewport.bottom < eleBoundaries.top || viewport.top > eleBoundaries.bottom);
-        };
+        }
 
         /***
          * Check if mouse is hovering over the element
@@ -85,7 +110,7 @@
          * @param event - event object, needed to get mouse position
          * @returns {boolean}
          */
-        utils.isHover = function (ele, event) {
+        function isHover(ele, event) {
             var eleRect, x, y;
             eleRect = ele.getBoundingClientRect();
             x = event.pageX || event.clientX;
@@ -94,29 +119,14 @@
                 return true;
             }
             return false;
-        };
+        }
 
-        return utils;
-    }(window.UTILS || {}, jQuery));
-
-    if (!String.prototype.supplant) {
-        /**
-         * Python like string formatting
-         *
-         * i.e.:
-         *
-         * >>> s = 'hello {name}'
-         * >>> s.supplan({name: 'ana'})
-         * >>> 'hello ana'
-         * */
-        String.prototype.supplant = function (o) {
-            return this.replace(
-                /\{([^{}]*)\}/g,
-                function (a, b) {
-                    var r = o[b];
-                    return typeof r === 'string' || typeof r === 'number' ? r : a;
-                }
-            );
+        return {
+            typeOf: typeOf,
+            isEmpty: isEmpty,
+            isElementInViewPort: isElementInViewPort,
+            isHover: isHover
         };
-    }
-}());
+    });
+
+}(define));
